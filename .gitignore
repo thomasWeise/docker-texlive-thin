@@ -1,0 +1,6 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+docker-texlive-thin.Rproj
+*.Rproj
