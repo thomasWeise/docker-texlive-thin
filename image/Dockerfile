@@ -38,6 +38,8 @@ RUN apt-get update &&\
 # get and update certificates, to hopefully resolve mscorefonts error
     apt-get install -f -y --no-install-recommends ca-certificates &&\
     update-ca-certificates &&\
+# install some utilitites
+    apt-get install -f -y --no-install-recommends curl fontconfig &&\
 # install the microsoft core fonts
     echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections &&\
     echo "ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note" | debconf-set-selections &&\
