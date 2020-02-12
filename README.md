@@ -4,8 +4,8 @@
 [![Docker Stars](http://img.shields.io/docker/stars/thomasweise/docker-texlive-thin.svg)](http://hub.docker.com/r/thomasweise/docker-texlive-thin/)
 
 This is a Docker image containing a [`TeX Live`](http://en.wikipedia.org/wiki/TeX_Live) installation with several fonts.
-The goal is to provide a base image for my other LaTeX-related containers.
-Regarding the fonts, we have, e.g., the several pre-installed open Chinese fonts.
+The goal is to provide a base image for my other LaTeX-related containers, such as [docker-pandoc](http://www.github.com/thomasWeise/docker-pandoc).
+It is an alternative to my bigger, full `Tex Live` installation in docker, namely [docker-texlive-full](http://www.github.com/thomasWeise/docker-texlive-full).
 
 ## 1. Building and Components
 
