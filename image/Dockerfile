@@ -80,6 +80,7 @@ RUN apt-get update &&\
 # update font cache
     fc-cache -fv &&\
 # clean up all temporary files
+    apt-get clean -y &&\
     rm -rf /var/lib/apt/lists/* &&\
     rm -f /etc/ssh/ssh_host_* &&\
 # delete man pages and documentation
