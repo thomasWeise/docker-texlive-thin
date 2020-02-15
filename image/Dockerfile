@@ -61,6 +61,7 @@ RUN apt-get update &&\
           texlive-base \
           texlive-binaries \
           texlive-font-utils \
+          texlive-fonts-extra \
           texlive-fonts-recommended \
           texlive-latex-base \
           texlive-latex-recommended \
