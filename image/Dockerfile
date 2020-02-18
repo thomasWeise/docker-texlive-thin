@@ -76,6 +76,8 @@ RUN apt-get update &&\
     rm -rf /usr/share/texlive/release-texlive.txt || true &&\
     rm -rf /usr/share/texlive/doc.html || true &&\
     rm -rf /usr/share/texlive/index.html || true &&\
+    rm -rf /usr/share/texlive/texmf-dist/fonts/source &&\
+    rm -rf /usr/share/texlive/texmf-dist/tex/latex/pst-poker &&\
 # update font cache
     fc-cache -fv &&\
 # clean up all temporary files
