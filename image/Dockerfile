@@ -50,6 +50,9 @@ RUN apt-get update &&\
     apt-get install -f -y --no-install-recommends \
           cm-super \
           dvipng \
+          fonts-dejavu \
+          fonts-dejavu-core \
+          fonts-dejavu-extra \
           ghostscript \
           make \
           latexmk \

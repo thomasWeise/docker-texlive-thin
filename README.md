@@ -5,7 +5,9 @@
 
 This is a Docker image containing a [`TeX Live`](http://en.wikipedia.org/wiki/TeX_Live) installation with several fonts.
 The goal is to provide a base image for my other LaTeX-related containers, such as [docker-pandoc](http://www.github.com/thomasWeise/docker-pandoc).
-It is an alternative to my bigger, full `Tex Live` installation in docker, namely [docker-texlive-full](http://www.github.com/thomasWeise/docker-texlive-full).
+It is an alternative to my significantly bigger, full `Tex Live` installation in docker, namely [docker-texlive-full](http://www.github.com/thomasWeise/docker-texlive-full).
+While the name of this image includes `thin`, it is not a minimal `Tex Live` installation.
+It does contain some additional and basic packages as well as fonts, but nothing as funky as in the other container.
 
 ## 1. Building and Components
 
