@@ -32,17 +32,22 @@ RUN apt-get update &&\
     mkdir -p /usr/share/doc &&\
     mkdir -p /usr/share/info &&\
 # install utilities
-    apt-get install -f -y --no-install-recommends apt-utils &&\
+    apt-get install -f -y --no-install-recommends apt-utils || exit 1 &&\
 # get and update certificates, to hopefully resolve mscorefonts error
-    apt-get install -f -y --no-install-recommends ca-certificates &&\
+    apt-get install -f -y --no-install-recommends ca-certificates || exit 1  &&\
     update-ca-certificates &&\
 # install some utilitites
-    apt-get install -f -y --no-install-recommends curl fontconfig &&\
+    apt-get install -f -y --no-install-recommends \
+          curl \
+          fonts-dejavu \
+          fonts-dejavu-core \
+          fonts-dejavu-extra \
+          fontconfig || exit 1  &&\
 # install the microsoft core fonts
     echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections &&\
     echo "ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note" | debconf-set-selections &&\
     curl --output "/tmp/ttf-mscorefonts-installer.deb" "http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.7_all.deb" &&\
-    apt install -f -y --no-install-recommends "/tmp/ttf-mscorefonts-installer.deb" || true &&\
+    apt install -f -y --no-install-recommends "/tmp/ttf-mscorefonts-installer.deb" || exit 1 &&\
     rm -f "/tmp/ttf-mscorefonts-installer.deb" &&\
 # we make sure to contain the EULA in our container
     curl --output "/root/mscorefonts-eula" "http://corefonts.sourceforge.net/eula.htm" &&\
@@ -50,9 +55,6 @@ RUN apt-get update &&\
     apt-get install -f -y --no-install-recommends \
           cm-super \
           dvipng \
-          fonts-dejavu \
-          fonts-dejavu-core \
-          fonts-dejavu-extra \
           ghostscript \
           make \
           latexmk \
@@ -70,7 +72,7 @@ RUN apt-get update &&\
           texlive-latex-recommended \
           texlive-luatex \
           texlive-pstricks \
-          texlive-xetex &&\
+          texlive-xetex || exit 1 &&\
 # delete texlive sources and other potentially useless stuff
     rm -rf /usr/share/texmf/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/source || true &&\
