@@ -73,7 +73,6 @@ RUN apt-get update &&\
           texlive-luatex \
           texlive-pstricks \
           texlive-xetex || exit 1 &&\
-    tlmgr install siunitx || exit 1 &&\
 # delete texlive sources and other potentially useless stuff
     rm -rf /usr/share/texmf/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/source || true &&\
