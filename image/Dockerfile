@@ -42,7 +42,8 @@ RUN apt-get update &&\
           fonts-dejavu \
           fonts-dejavu-core \
           fonts-dejavu-extra \
-          fontconfig || exit 1  &&\
+          fontconfig \
+          xz-utils || exit 1  &&\
 # install the microsoft core fonts
     echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections &&\
     echo "ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note" | debconf-set-selections &&\
@@ -73,9 +74,17 @@ RUN apt-get update &&\
           texlive-luatex \
           texlive-pstricks \
           texlive-xetex || exit 1 &&\
+# Install other necessary latex packages without
+# user tree and then and clean up.
+    tlmgr init-usertree &&
+    tlmgr install siunitx &&
+    mv -n /root/texmf/tex/latex/* /usr/share/texlive/texmf-dist/tex/latex/ &&
+    rm -rf /root/texmf &&
+    texhash &&
 # delete texlive sources and other potentially useless stuff
     rm -rf /usr/share/texmf/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/source || true &&\
+    rm -rf /usr/share/texlive/texmf-dist/doc/ || true &&\
     find /usr/share/texlive -type f -name "readme*.*" -delete &&\
     find /usr/share/texlive -type f -name "README*.*" -delete &&\
     rm -rf /usr/share/texlive/release-texlive.txt || true &&\
