@@ -76,7 +76,9 @@ RUN apt-get update &&\
 # Install other necessary latex packages without
 # user tree and then and clean up.
     tlmgr init-usertree || exit 1 &&\
+    echo "tlmgr init-usertree done successfully" &&\
     updmap-sys || exit 1 &&\
+    echo "initial updmap-sys done successfully" &&\
     tlmgr install awesomebox \
                   babel-german \
                   background \
@@ -96,14 +98,20 @@ RUN apt-get update &&\
                   ucharcat \
                   unicode-math \
                   xecjk || exit 1 &&\
+    echo "tlmgr installes completed successfully" &&\
     rm -rf /root/texmf/tlpkg &&\
     rm -rf /root/texmf/web2c &&\
     cp -n -r /root/texmf/* /usr/share/texlive/texmf-dist/ || exit 1 &&\
     rm -rf /root/texmf &&\
+    echo "insalled packages merged and /root/texmf deleted" &&\
     texhash --verbose || exit 1 &&\
+    echo "texhash completed successfully" &&\
     updmap-sys || exit 1 &&\
+    echo "updmap-sys completed successfully" &&\
     texhash --verbose || exit 1 &&\
+    echo "texhash completed successfully" &&\
     updmap-sys || exit 1 &&\
+    echo "done with automated package installation" &&\
 # delete texlive sources and other potentially useless stuff
     rm -rf /usr/share/texmf/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/source || true &&\
