@@ -109,14 +109,29 @@ RUN apt-get update &&\
     rm -rf /root/texmf || true &&\
     rm -rf /root/texmf-var || true &&\
     echo "insalled packages merged and /root/texmf deleted" &&\
+# update latex and font system files:
+# Since I am not sure about the proper order,
+# we just do this twice.
+# iteration 1
+    fc-cache -fv || exit 1 &&\
+    echo "fc-cache succeeded" &&\
     texhash --verbose || exit 1 &&\
     echo "texhash completed successfully" &&\
     updmap-sys || exit 1 &&\
     echo "updmap-sys completed successfully" &&\
+    mktexlsr --verbose || exit 1 &&\
+    echo "mktexlsr succeeded" &&\
+# iteration 2
+    fc-cache -fv || exit 1 &&\
+    echo "fc-cache succeeded" &&\
     texhash --verbose || exit 1 &&\
     echo "texhash completed successfully" &&\
     updmap-sys || exit 1 &&\
-    echo "done with automated package installation" &&\
+    echo "updmap-sys completed successfully" &&\
+    mktexlsr --verbose || exit 1 &&\
+    echo "mktexlsr succeeded" &&\
+# Hopefully, the installation and merging of latex packages
+# into the system-wide latex installation has worked...
 # delete texlive sources and other potentially useless stuff
     rm -rf /usr/share/texmf/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/source || true &&\
@@ -128,8 +143,6 @@ RUN apt-get update &&\
     rm -rf /usr/share/texlive/index.html || true &&\
     rm -rf /usr/share/texlive/texmf-dist/fonts/source &&\
     rm -rf /usr/share/texlive/texmf-dist/tex/latex/pst-poker &&\
-# update font cache
-    fc-cache -fv &&\
 # clean up all temporary files
     apt-get clean -y &&\
     rm -rf /var/lib/apt/lists/* &&\
