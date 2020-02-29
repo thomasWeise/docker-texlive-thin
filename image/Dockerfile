@@ -108,7 +108,7 @@ RUN apt-get update &&\
     cp -n -r /root/texmf/* /usr/share/texlive/texmf-dist/ || exit 1 &&\
     rm -rf /root/texmf || true &&\
     rm -rf /root/texmf-var || true &&\
-    echo "insalled packages merged and /root/texmf deleted" &&\
+    echo "installed packages merged and /root/texmf deleted" &&\
 # update latex and font system files:
 # Since I am not sure about the proper order,
 # we just do this twice.
