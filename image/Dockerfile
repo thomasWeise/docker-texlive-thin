@@ -67,7 +67,6 @@ RUN apt-get update &&\
           texlive-base \
           texlive-binaries \
           texlive-font-utils \
-#         texlive-fonts-extra \
           texlive-fonts-recommended \
           texlive-latex-base \
           texlive-latex-recommended \
@@ -76,18 +75,35 @@ RUN apt-get update &&\
           texlive-xetex || exit 1 &&\
 # Install other necessary latex packages without
 # user tree and then and clean up.
-    tlmgr init-usertree &&\
-    updmap -sys &&\
-    tlmgr install siunitx \
-                  sourcesanspro &&\
+    tlmgr init-usertree || exit 1 &&\
+    updmap-sys || exit 1 &&\
+    tlmgr install awesomebox \
+                  babel-german \
+                  background \
+                  filehook \
+                  fontawesome5 \
+                  footmisc \
+                  footnotebackref \
+                  fvextra \
+                  ly1 \
+                  mdframed \
+                  mweights \
+                  needspace \
+                  pagecolor \
+                  siunitx \
+                  sourcecodepro \
+                  sourcesanspro \
+                  ucharcat \
+                  unicode-math \
+                  xecjk || exit 1 &&\
     rm -rf /root/texmf/tlpkg &&\
     rm -rf /root/texmf/web2c &&\
-    cp -n -r /root/texmf/* /usr/share/texlive/texmf-dist/ &&\
+    cp -n -r /root/texmf/* /usr/share/texlive/texmf-dist/ || exit 1 &&\
     rm -rf /root/texmf &&\
-    texhash &&\
-    updmap -sys &&\
-    texhash &&\
-    updmap -sys &&\
+    texhash --verbose || exit 1 &&\
+    updmap-sys || exit 1 &&\
+    texhash --verbose || exit 1 &&\
+    updmap-sys || exit 1 &&\
 # delete texlive sources and other potentially useless stuff
     rm -rf /usr/share/texmf/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/source || true &&\
