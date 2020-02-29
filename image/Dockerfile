@@ -67,7 +67,7 @@ RUN apt-get update &&\
           texlive-base \
           texlive-binaries \
           texlive-font-utils \
-          texlive-fonts-extra \
+#         texlive-fonts-extra \
           texlive-fonts-recommended \
           texlive-latex-base \
           texlive-latex-recommended \
@@ -77,10 +77,17 @@ RUN apt-get update &&\
 # Install other necessary latex packages without
 # user tree and then and clean up.
     tlmgr init-usertree &&\
-    tlmgr install siunitx &&\
-    mv -n /root/texmf/tex/latex/* /usr/share/texlive/texmf-dist/tex/latex/ &&\
+    updmap -sys &&\
+    tlmgr install siunitx \
+                  sourcesanspro &&\
+    rm -rf /root/texmf/tlpkg &&\
+    rm -rf /root/texmf/web2c &&\
+    cp -n -r /root/texmf/* /usr/share/texlive/texmf-dist/ &&\
     rm -rf /root/texmf &&\
     texhash &&\
+    updmap -sys &&\
+    texhash &&\
+    updmap -sys &&\
 # delete texlive sources and other potentially useless stuff
     rm -rf /usr/share/texmf/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/source || true &&\
