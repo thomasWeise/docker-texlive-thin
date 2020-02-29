@@ -79,6 +79,9 @@ RUN apt-get update &&\
     echo "tlmgr init-usertree done successfully" &&\
     updmap-sys || exit 1 &&\
     echo "initial updmap-sys done successfully" &&\
+# tlmgr will call updmap-sys unsuccessfully for
+# reasons I do not understand, so while it seemingly
+# succeeds, it will still fail
     tlmgr install awesomebox \
                   babel-german \
                   background \
@@ -97,12 +100,14 @@ RUN apt-get update &&\
                   sourcesanspro \
                   ucharcat \
                   unicode-math \
-                  xecjk || exit 1 &&\
-    echo "tlmgr installes completed successfully" &&\
-    rm -rf /root/texmf/tlpkg &&\
-    rm -rf /root/texmf/web2c &&\
+                  xecjk || true &&\
+    echo "tlmgr install completed" &&\
+    cat /root/texmf/web2c/updmap.cfg >> /usr/share/texmf/web2c/updmap.cfg &&\
+    rm -rf /root/texmf/tlpkg || true &&\
+    rm -rf /root/texmf/web2c || true &&\
     cp -n -r /root/texmf/* /usr/share/texlive/texmf-dist/ || exit 1 &&\
-    rm -rf /root/texmf &&\
+    rm -rf /root/texmf || true &&\
+    rm -rf /root/texmf-var || true &&\
     echo "insalled packages merged and /root/texmf deleted" &&\
     texhash --verbose || exit 1 &&\
     echo "texhash completed successfully" &&\
