@@ -121,6 +121,10 @@ RUN apt-get update &&\
     echo "updmap-sys completed successfully" &&\
     mktexlsr --verbose || exit 1 &&\
     echo "mktexlsr succeeded" &&\
+    fmtutil-sys --quiet --missing &&\
+    echo "fmtutil-sys --missing completed successfully" &&\
+    fmtutil-sys --quiet --all > /dev/null &&\
+    echo "fmtutil-sys --all completed successfully" &&\
 # iteration 2
     fc-cache -fv || exit 1 &&\
     echo "fc-cache succeeded" &&\
@@ -130,6 +134,10 @@ RUN apt-get update &&\
     echo "updmap-sys completed successfully" &&\
     mktexlsr --verbose || exit 1 &&\
     echo "mktexlsr succeeded" &&\
+    fmtutil-sys --quiet --missing &&\
+    echo "fmtutil-sys --missing completed successfully" &&\
+    fmtutil-sys --quiet --all > /dev/null &&\
+    echo "fmtutil-sys --all completed successfully" &&\
 # Hopefully, the installation and merging of latex packages
 # into the system-wide latex installation has worked...
 # delete texlive sources and other potentially useless stuff
