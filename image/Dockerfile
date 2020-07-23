@@ -177,14 +177,13 @@ RUN apt-get -y update &&\
     cd "/tmp/" &&\
     echo "\\documentclass{article}%" > test.tex &&\
     echo "\\usepackage{awesomebox}%" >> test.tex &&\
-    echo "\\usepackage{babel-german}%" >> test.tex &&\
     echo "\\usepackage{background}%" >> test.tex &&\
     echo "\\usepackage{filehook}%" >> test.tex &&\
     echo "\\usepackage{fontawesome5}%" >> test.tex &&\
     echo "\\usepackage{footmisc}%" >> test.tex &&\
     echo "\\usepackage{footnotebackref}%" >> test.tex &&\
     echo "\\usepackage{fvextra}%" >> test.tex &&\
-    echo "\\usepackage{ly1}%" >> test.tex &&\
+    echo "\\usepackage[LY1]{fontenc}%" >> test.tex &&\
     echo "\\usepackage{mdframed}%" >> test.tex &&\
     echo "\\usepackage{mweights}%" >> test.tex &&\
     echo "\\usepackage{needspace}%" >> test.tex &&\
