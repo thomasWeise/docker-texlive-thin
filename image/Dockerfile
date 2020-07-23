@@ -15,7 +15,9 @@ MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update &&\
+RUN apt-get -y update &&\
+    apt-get -y --fix-missing install &&\
+    apt-get -y --with-new-pkgs upgrade &&\
 # prevent doc and man pages from being installed
 # the idea is based on https://askubuntu.com/questions/129566
     printf 'path-exclude /usr/share/doc/*\npath-include /usr/share/doc/*/copyright\npath-exclude /usr/share/man/*\npath-exclude /usr/share/groff/*\npath-exclude /usr/share/info/*\npath-exclude /usr/share/lintian/*\npath-exclude /usr/share/linda/*\npath-exclude=/usr/share/locale/*' > /etc/dpkg/dpkg.cfg.d/01_nodoc &&\
