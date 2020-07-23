@@ -9,19 +9,22 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
-FROM ubuntu:20.04
+FROM ubuntu:20.10
 MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get -y update &&\
+RUN echo "Performing initial clean-up and updates." &&\
+    apt-get -y update &&\
     apt-get -y --fix-missing install &&\
     apt-get -y --with-new-pkgs upgrade &&\
 # prevent doc and man pages from being installed
 # the idea is based on https://askubuntu.com/questions/129566
+    echo "Preventing documentation and man-pages from being installed." &&\
     printf 'path-exclude /usr/share/doc/*\npath-include /usr/share/doc/*/copyright\npath-exclude /usr/share/man/*\npath-exclude /usr/share/groff/*\npath-exclude /usr/share/info/*\npath-exclude /usr/share/lintian/*\npath-exclude /usr/share/linda/*\npath-exclude=/usr/share/locale/*' > /etc/dpkg/dpkg.cfg.d/01_nodoc &&\
 # remove doc files and man pages already installed
+    echo "Removing documentation and man pages already installed." &&\
     rm -rf /usr/share/groff/* /usr/share/info/* &&\
     rm -rf /usr/share/lintian/* /usr/share/linda/* /var/cache/man/* &&\
     rm -rf /usr/share/man &&\
@@ -34,11 +37,14 @@ RUN apt-get -y update &&\
     mkdir -p /usr/share/doc &&\
     mkdir -p /usr/share/info &&\
 # install utilities
+    echo "Installing utilities." &&\
     apt-get install -f -y --no-install-recommends apt-utils || exit 1 &&\
 # get and update certificates, to hopefully resolve mscorefonts error
+    echo "Getting and updating certificates to help with mscorefonts." &&\
     apt-get install -f -y --no-install-recommends ca-certificates || exit 1  &&\
     update-ca-certificates &&\
 # install some utilitites
+    echo "Installing more fonts and utilities." &&\
     apt-get install -f -y --no-install-recommends \
           curl \
           fonts-dejavu \
@@ -47,14 +53,17 @@ RUN apt-get -y update &&\
           fontconfig \
           xz-utils || exit 1  &&\
 # install the microsoft core fonts
+    echo "Installing Microsoft core fonts." &&\
     echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections &&\
     echo "ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note" | debconf-set-selections &&\
     curl --output "/tmp/ttf-mscorefonts-installer.deb" "http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.7_all.deb" &&\
     apt install -f -y --no-install-recommends "/tmp/ttf-mscorefonts-installer.deb" || exit 1 &&\
     rm -f "/tmp/ttf-mscorefonts-installer.deb" &&\
 # we make sure to contain the EULA in our container
+    echo "Adding Microsoft EULA to image." &&\
     curl --output "/root/mscorefonts-eula" "http://corefonts.sourceforge.net/eula.htm" &&\
 # install TeX Live and ghostscript as well as other tools
+    echo "Installing TeX Live and ghostscript and other tools." &&\
     apt-get install -f -y --no-install-recommends \
           cm-super \
           dvipng \
@@ -77,6 +86,7 @@ RUN apt-get -y update &&\
           texlive-xetex || exit 1 &&\
 # Install other necessary latex packages without
 # user tree and then and clean up.
+    echo "Initializing user tree." &&\
     tlmgr init-usertree || exit 1 &&\
     echo "tlmgr init-usertree done successfully" &&\
     updmap-sys || exit 1 &&\
@@ -84,6 +94,7 @@ RUN apt-get -y update &&\
 # tlmgr will call updmap-sys unsuccessfully for
 # reasons I do not understand, so while it seemingly
 # succeeds, it will still fail
+    echo "Installing packages." &&\
     tlmgr install awesomebox \
                   babel-german \
                   background \
@@ -103,7 +114,7 @@ RUN apt-get -y update &&\
                   ucharcat \
                   unicode-math \
                   xecjk || true &&\
-    echo "tlmgr install completed" &&\
+    echo "tlmgr install completed, moving fonts" &&\
     cat /root/texmf/web2c/updmap.cfg >> /usr/share/texmf/web2c/updmap.cfg &&\
     rm -rf /root/texmf/tlpkg || true &&\
     rm -rf /root/texmf/web2c || true &&\
@@ -115,6 +126,7 @@ RUN apt-get -y update &&\
 # Since I am not sure about the proper order,
 # we just do this twice.
 # iteration 1
+    echo "Updating LaTeX and font system files, iteration 1." &&\
     fc-cache -fv || exit 1 &&\
     echo "fc-cache succeeded" &&\
     texhash --verbose || exit 1 &&\
@@ -128,6 +140,7 @@ RUN apt-get -y update &&\
     fmtutil-sys --quiet --all > /dev/null &&\
     echo "fmtutil-sys --all completed successfully" &&\
 # iteration 2
+    echo "Updating LaTeX and font system files, iteration 2." &&\
     fc-cache -fv || exit 1 &&\
     echo "fc-cache succeeded" &&\
     texhash --verbose || exit 1 &&\
@@ -143,6 +156,7 @@ RUN apt-get -y update &&\
 # Hopefully, the installation and merging of latex packages
 # into the system-wide latex installation has worked...
 # delete texlive sources and other potentially useless stuff
+    echo "Removing potentially useless stuff from LaTeX installation." &&\
     rm -rf /usr/share/texmf/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/source || true &&\
     rm -rf /usr/share/texlive/texmf-dist/doc/ || true &&\
@@ -154,10 +168,12 @@ RUN apt-get -y update &&\
     rm -rf /usr/share/texlive/texmf-dist/fonts/source &&\
     rm -rf /usr/share/texlive/texmf-dist/tex/latex/pst-poker &&\
 # clean up all temporary files
+    echo "Cleaning up temporary files." &&\
     apt-get clean -y &&\
     rm -rf /var/lib/apt/lists/* &&\
     rm -f /etc/ssh/ssh_host_* &&\
 # delete man pages and documentation
+    echo "Deleting man pages and documentation." &&\
     rm -rf /usr/share/man &&\
     mkdir -p /usr/share/man &&\
     find /usr/share/doc -depth -type f ! -name copyright -delete &&\
@@ -174,6 +190,7 @@ RUN apt-get -y update &&\
     mkdir -p /usr/share/texmf/source &&\
     mkdir -p /usr/share/texlive/texmf-dist/source &&\
 # run a test: are the LaTeX packages really installed?
+    echo "Testing whether the LaTeX packages have been installed correctly." &&\
     cd "/tmp/" &&\
     echo "\\documentclass{article}%" > test.tex &&\
     echo "\\usepackage{awesomebox}%" >> test.tex &&\
@@ -194,11 +211,13 @@ RUN apt-get -y update &&\
     echo "\\begin{document}%" >> test.tex &&\
     echo "This is a test!" >> test.tex &&\
     echo "\\end{document}%" >> test.tex &&\
-    latex test.tex &&\
+    echo "Now testing LaTeX." &&\
+    latex -halt-on-error -interaction=nonstopmode -no-shell-escape test.tex &&\
     mv test.tex a &&\
     rm -f test.* &&\
     mv a test.tex &&\
-    pdflatex test.tex &&\
+    echo "Now testing PdfLaTeX." &&\
+    pdflatex -halt-on-error -interaction=nonstopmode -no-shell-escape test.tex &&\
     rm -rf /tmp/* /var/tmp/* &&\
     echo "\\documentclass{article}%" > test.tex &&\
     echo "\\usepackage{ucharcat}%" >> test.tex &&\
@@ -207,8 +226,11 @@ RUN apt-get -y update &&\
     echo "\\begin{document}%" >> test.tex &&\
     echo "This is a test!" >> test.tex &&\
     echo "\\end{document}%" >> test.tex &&\
-    xelatex test.tex &&\
+    echo "Now testing XeLaTeX." &&\
+    xelatex -halt-on-error -interaction=nonstopmode -no-shell-escape test.tex &&\
 # final cleanup
-    rm -rf /tmp/* /var/tmp/*
+    echo "Performing final clean-up." &&\
+    rm -rf /tmp/* /var/tmp/* &&\
+    echo "Setup completed."
 
 ADD scripts /bin/
