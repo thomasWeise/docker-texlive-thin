@@ -98,6 +98,7 @@ RUN echo "Performing initial clean-up and updates." &&\
     tlmgr install awesomebox \
                   babel-german \
                   background \
+                  ctex \
                   filehook \
                   fontawesome5 \
                   footmisc \
