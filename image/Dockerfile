@@ -222,7 +222,7 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo '\\documentclass{article}%' > test.tex &&\
     echo '\\usepackage{ucharcat}%' >> test.tex &&\
     echo '\\usepackage{unicode-math}%' >> test.tex &&\
-    echo '\\usepackage{xecjk}%' >> test.tex &&\
+    echo '\\usepackage{xeCJK}%' >> test.tex &&\
     echo '\\begin{document}%' >> test.tex &&\
     echo 'This is a test!' >> test.tex &&\
     echo '\\end{document}%' >> test.tex &&\
