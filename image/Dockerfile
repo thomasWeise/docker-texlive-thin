@@ -221,6 +221,7 @@ RUN echo "Performing initial clean-up and updates." &&\
     pdflatex -halt-on-error -interaction=nonstopmode -no-shell-escape test.tex &&\
     rm -rf /tmp/* /var/tmp/* &&\
     echo '\\documentclass{article}%' > test.tex &&\
+    echo '\\usepackage{xeCJK}%' >> test.tex &&\
     echo '\\usepackage{ucharcat}%' >> test.tex &&\
     echo '\\usepackage{unicode-math}%' >> test.tex &&\
     echo '\\begin{document}%' >> test.tex &&\
