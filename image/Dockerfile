@@ -69,6 +69,7 @@ RUN echo "Performing initial clean-up and updates." &&\
           dvipng \
           ghostscript \
           make \
+          latex-cjk-chinese \
           latexmk \
           lmodern \
           poppler-utils \
@@ -79,6 +80,7 @@ RUN echo "Performing initial clean-up and updates." &&\
           texlive-binaries \
           texlive-font-utils \
           texlive-fonts-recommended \
+          texlive-lang-chinese \
           texlive-latex-base \
           texlive-latex-recommended \
           texlive-luatex \
