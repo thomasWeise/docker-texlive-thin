@@ -208,7 +208,9 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo '\usepackage{siunitx}%' >> test.tex &&\
     echo '\usepackage{sourcecodepro}%' >> test.tex &&\
     echo '\usepackage{sourcesanspro}%' >> test.tex &&\
-    echo '\begin{document}%' >> test.tex &&\
+    beginA='\' &&\
+    beginB='begin{document}%' &&\
+    echo "$beginA$beginB" >> test.tex &&\
     echo 'This is a test!' >> test.tex &&\
     echo '\end{document}%' >> test.tex &&\
     echo "Now testing LaTeX." &&\
@@ -223,7 +225,7 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo '\usepackage{ucharcat}%' >> test.tex &&\
     echo '\usepackage{unicode-math}%' >> test.tex &&\
     echo '\usepackage{xecjk}%' >> test.tex &&\
-    echo '\begin{document}%' >> test.tex &&\
+    echo "$beginA$beginB" >> test.tex &&\
     echo 'This is a test!' >> test.tex &&\
     echo '\end{document}%' >> test.tex &&\
     echo "Now testing XeLaTeX." &&\
