@@ -98,7 +98,6 @@ RUN echo "Performing initial clean-up and updates." &&\
     tlmgr install awesomebox \
                   babel-german \
                   background \
-                  ctex \
                   filehook \
                   fontawesome5 \
                   footmisc \
@@ -113,8 +112,7 @@ RUN echo "Performing initial clean-up and updates." &&\
                   sourcecodepro \
                   sourcesanspro \
                   ucharcat \
-                  unicode-math \
-                  xecjk || true &&\
+                  unicode-math || true &&\
     echo "tlmgr install completed, moving fonts" &&\
     cat /root/texmf/web2c/updmap.cfg >> /usr/share/texmf/web2c/updmap.cfg &&\
     rm -rf /root/texmf/tlpkg || true &&\
@@ -223,7 +221,6 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo '\\documentclass{article}%' > test.tex &&\
     echo '\\usepackage{ucharcat}%' >> test.tex &&\
     echo '\\usepackage{unicode-math}%' >> test.tex &&\
-    echo '\\usepackage{xeCJK}%' >> test.tex &&\
     echo '\\begin{document}%' >> test.tex &&\
     echo 'This is a test!' >> test.tex &&\
     echo '\\end{document}%' >> test.tex &&\
