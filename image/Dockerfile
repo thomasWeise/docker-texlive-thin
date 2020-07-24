@@ -192,27 +192,25 @@ RUN echo "Performing initial clean-up and updates." &&\
 # run a test: are the LaTeX packages really installed?
     echo "Testing whether the LaTeX packages have been installed correctly." &&\
     cd "/tmp/" &&\
-    echo '\documentclass{article}%' > test.tex &&\
-    echo '\usepackage{awesomebox}%' >> test.tex &&\
-    echo '\usepackage{background}%' >> test.tex &&\
-    echo '\usepackage{filehook}%' >> test.tex &&\
-    echo '\usepackage{fontawesome5}%' >> test.tex &&\
-    echo '\usepackage{footmisc}%' >> test.tex &&\
-    echo '\usepackage{footnotebackref}%' >> test.tex &&\
-    echo '\usepackage{fvextra}%' >> test.tex &&\
-    echo '\usepackage[LY1]{fontenc}%' >> test.tex &&\
-    echo '\usepackage{mdframed}%' >> test.tex &&\
-    echo '\usepackage{mweights}%' >> test.tex &&\
-    echo '\usepackage{needspace}%' >> test.tex &&\
-    echo '\usepackage{pagecolor}%' >> test.tex &&\
-    echo '\usepackage{siunitx}%' >> test.tex &&\
-    echo '\usepackage{sourcecodepro}%' >> test.tex &&\
-    echo '\usepackage{sourcesanspro}%' >> test.tex &&\
-    beginA='\' &&\
-    beginB='begin{document}%' &&\
-    echo "$beginA$beginB" >> test.tex &&\
+    echo '\\documentclass{article}%' > test.tex &&\
+    echo '\\usepackage{awesomebox}%' >> test.tex &&\
+    echo '\\usepackage{background}%' >> test.tex &&\
+    echo '\\usepackage{filehook}%' >> test.tex &&\
+    echo '\\usepackage{fontawesome5}%' >> test.tex &&\
+    echo '\\usepackage{footmisc}%' >> test.tex &&\
+    echo '\\usepackage{footnotebackref}%' >> test.tex &&\
+    echo '\\usepackage{fvextra}%' >> test.tex &&\
+    echo '\\usepackage[LY1]{fontenc}%' >> test.tex &&\
+    echo '\\usepackage{mdframed}%' >> test.tex &&\
+    echo '\\usepackage{mweights}%' >> test.tex &&\
+    echo '\\usepackage{needspace}%' >> test.tex &&\
+    echo '\\usepackage{pagecolor}%' >> test.tex &&\
+    echo '\\usepackage{siunitx}%' >> test.tex &&\
+    echo '\\usepackage{sourcecodepro}%' >> test.tex &&\
+    echo '\\usepackage{sourcesanspro}%' >> test.tex &&\
+    echo '\\begin{document}%' >> test.tex &&\
     echo 'This is a test!' >> test.tex &&\
-    echo '\end{document}%' >> test.tex &&\
+    echo '\\end{document}%' >> test.tex &&\
     echo "Now testing LaTeX." &&\
     latex -halt-on-error -interaction=nonstopmode -no-shell-escape test.tex &&\
     mv test.tex a &&\
@@ -221,13 +219,13 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo "Now testing PdfLaTeX." &&\
     pdflatex -halt-on-error -interaction=nonstopmode -no-shell-escape test.tex &&\
     rm -rf /tmp/* /var/tmp/* &&\
-    echo '\documentclass{article}%' > test.tex &&\
-    echo '\usepackage{ucharcat}%' >> test.tex &&\
-    echo '\usepackage{unicode-math}%' >> test.tex &&\
-    echo '\usepackage{xecjk}%' >> test.tex &&\
-    echo "$beginA$beginB" >> test.tex &&\
+    echo '\\documentclass{article}%' > test.tex &&\
+    echo '\\usepackage{ucharcat}%' >> test.tex &&\
+    echo '\\usepackage{unicode-math}%' >> test.tex &&\
+    echo '\\usepackage{xecjk}%' >> test.tex &&\
+    echo '\\begin{document}%' >> test.tex &&\
     echo 'This is a test!' >> test.tex &&\
-    echo '\end{document}%' >> test.tex &&\
+    echo '\\end{document}%' >> test.tex &&\
     echo "Now testing XeLaTeX." &&\
     xelatex -halt-on-error -interaction=nonstopmode -no-shell-escape test.tex &&\
 # final cleanup
