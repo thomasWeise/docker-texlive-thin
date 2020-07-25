@@ -33,15 +33,15 @@ RUN echo "Performing initial clean-up and updates." &&\
     find /usr/share/doc -type f -name "*.pdf" -delete &&\
     find /usr/share/doc -type f -name "*.gz" -delete &&\
     find /usr/share/doc -type f -name "*.tex" -delete &&\
-    find /usr/share/doc -type d -empty -delete || true &&\
+    (find /usr/share/doc -type d -empty -delete || true) &&\
     mkdir -p /usr/share/doc &&\
     mkdir -p /usr/share/info &&\
 # install utilities
     echo "Installing utilities." &&\
-    apt-get install -f -y --no-install-recommends apt-utils || exit 1 &&\
+    apt-get install -f -y --no-install-recommends apt-utils &&\
 # get and update certificates, to hopefully resolve mscorefonts error
     echo "Getting and updating certificates to help with mscorefonts." &&\
-    apt-get install -f -y --no-install-recommends ca-certificates || exit 1  &&\
+    apt-get install -f -y --no-install-recommends ca-certificates &&\
     update-ca-certificates &&\
 # install some utilitites
     echo "Installing more fonts and utilities." &&\
@@ -51,13 +51,13 @@ RUN echo "Performing initial clean-up and updates." &&\
           fonts-dejavu-core \
           fonts-dejavu-extra \
           fontconfig \
-          xz-utils || exit 1  &&\
+          xz-utils &&\
 # install the microsoft core fonts
     echo "Installing Microsoft core fonts." &&\
     echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections &&\
     echo "ttf-mscorefonts-installer msttcorefonts/present-mscorefonts-eula note" | debconf-set-selections &&\
     curl --output "/tmp/ttf-mscorefonts-installer.deb" "http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.7_all.deb" &&\
-    apt install -f -y --no-install-recommends "/tmp/ttf-mscorefonts-installer.deb" || exit 1 &&\
+    apt install -f -y --no-install-recommends "/tmp/ttf-mscorefonts-installer.deb" &&\
     rm -f "/tmp/ttf-mscorefonts-installer.deb" &&\
 # we make sure to contain the EULA in our container
     echo "Adding Microsoft EULA to image." &&\
@@ -85,56 +85,56 @@ RUN echo "Performing initial clean-up and updates." &&\
           texlive-latex-recommended \
           texlive-luatex \
           texlive-pstricks \
-          texlive-xetex || exit 1 &&\
+          texlive-xetex &&\
 # Install other necessary latex packages without
 # user tree and then and clean up.
     echo "Initializing user tree." &&\
-    tlmgr init-usertree || exit 1 &&\
+    tlmgr init-usertree &&\
     echo "tlmgr init-usertree done successfully" &&\
-    updmap-sys || exit 1 &&\
+    updmap-sys &&\
     echo "initial updmap-sys done successfully" &&\
 # tlmgr will call updmap-sys unsuccessfully for
 # reasons I do not understand, so while it seemingly
 # succeeds, it will still fail
     echo "Installing packages." &&\
-    tlmgr install awesomebox \
-                  babel-german \
-                  background \
-                  filehook \
-                  fontawesome5 \
-                  footmisc \
-                  footnotebackref \
-                  fvextra \
-                  ly1 \
-                  mdframed \
-                  mweights \
-                  needspace \
-                  pagecolor \
-                  siunitx \
-                  sourcecodepro \
-                  sourcesanspro \
-                  ucharcat \
-                  unicode-math || true &&\
+    (tlmgr install awesomebox \
+                   babel-german \
+                   background \
+                   filehook \
+                   fontawesome5 \
+                   footmisc \
+                   footnotebackref \
+                   fvextra \
+                   ly1 \
+                   mdframed \
+                   mweights \
+                   needspace \
+                   pagecolor \
+                   siunitx \
+                   sourcecodepro \
+                   sourcesanspro \
+                   ucharcat \
+                   unicode-math || true) &&\
     echo "tlmgr install completed, moving fonts" &&\
     cat /root/texmf/web2c/updmap.cfg >> /usr/share/texmf/web2c/updmap.cfg &&\
-    rm -rf /root/texmf/tlpkg || true &&\
-    rm -rf /root/texmf/web2c || true &&\
-    cp -n -r /root/texmf/* /usr/share/texlive/texmf-dist/ || exit 1 &&\
-    rm -rf /root/texmf || true &&\
-    rm -rf /root/texmf-var || true &&\
+    (rm -rf /root/texmf/tlpkg || true) &&\
+    (rm -rf /root/texmf/web2c || true) &&\
+    cp -n -r /root/texmf/* /usr/share/texlive/texmf-dist/ &&\
+    (rm -rf /root/texmf || true) &&\
+    (rm -rf /root/texmf-var || true) &&\
     echo "installed packages merged and /root/texmf deleted" &&\
 # update latex and font system files:
 # Since I am not sure about the proper order,
 # we just do this twice.
 # iteration 1
     echo "Updating LaTeX and font system files, iteration 1." &&\
-    fc-cache -fv || exit 1 &&\
+    fc-cache -fv &&\
     echo "fc-cache succeeded" &&\
-    texhash --verbose || exit 1 &&\
+    texhash --verbose &&\
     echo "texhash completed successfully" &&\
-    updmap-sys || exit 1 &&\
+    updmap-sys &&\
     echo "updmap-sys completed successfully" &&\
-    mktexlsr --verbose || exit 1 &&\
+    mktexlsr --verbose &&\
     echo "mktexlsr succeeded" &&\
     fmtutil-sys --quiet --missing &&\
     echo "fmtutil-sys --missing completed successfully" &&\
@@ -142,13 +142,13 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo "fmtutil-sys --all completed successfully" &&\
 # iteration 2
     echo "Updating LaTeX and font system files, iteration 2." &&\
-    fc-cache -fv || exit 1 &&\
+    fc-cache -fv &&\
     echo "fc-cache succeeded" &&\
-    texhash --verbose || exit 1 &&\
+    texhash --verbose &&\
     echo "texhash completed successfully" &&\
-    updmap-sys || exit 1 &&\
+    updmap-sys &&\
     echo "updmap-sys completed successfully" &&\
-    mktexlsr --verbose || exit 1 &&\
+    mktexlsr --verbose &&\
     echo "mktexlsr succeeded" &&\
     fmtutil-sys --quiet --missing &&\
     echo "fmtutil-sys --missing completed successfully" &&\
@@ -158,14 +158,14 @@ RUN echo "Performing initial clean-up and updates." &&\
 # into the system-wide latex installation has worked...
 # delete texlive sources and other potentially useless stuff
     echo "Removing potentially useless stuff from LaTeX installation." &&\
-    rm -rf /usr/share/texmf/source || true &&\
-    rm -rf /usr/share/texlive/texmf-dist/source || true &&\
-    rm -rf /usr/share/texlive/texmf-dist/doc/ || true &&\
+    (rm -rf /usr/share/texmf/source || true) &&\
+    (rm -rf /usr/share/texlive/texmf-dist/source || true) &&\
+    (rm -rf /usr/share/texlive/texmf-dist/doc/ || true) &&\
     find /usr/share/texlive -type f -name "readme*.*" -delete &&\
     find /usr/share/texlive -type f -name "README*.*" -delete &&\
-    rm -rf /usr/share/texlive/release-texlive.txt || true &&\
-    rm -rf /usr/share/texlive/doc.html || true &&\
-    rm -rf /usr/share/texlive/index.html || true &&\
+    (rm -rf /usr/share/texlive/release-texlive.txt || true) &&\
+    (rm -rf /usr/share/texlive/doc.html || true) &&\
+    (rm -rf /usr/share/texlive/index.html || true) &&\
     rm -rf /usr/share/texlive/texmf-dist/fonts/source &&\
     rm -rf /usr/share/texlive/texmf-dist/tex/latex/pst-poker &&\
 # clean up all temporary files
@@ -181,13 +181,13 @@ RUN echo "Performing initial clean-up and updates." &&\
     find /usr/share/doc -type f -name "*.pdf" -delete &&\
     find /usr/share/doc -type f -name "*.gz" -delete &&\
     find /usr/share/doc -type f -name "*.tex" -delete &&\
-    find /usr/share/doc -type d -empty -delete || true &&\
+    (find /usr/share/doc -type d -empty -delete || true) &&\
     mkdir -p /usr/share/doc &&\
     rm -rf /var/cache/apt/archives &&\
     mkdir -p /var/cache/apt/archives &&\
     rm -rf /tmp/* /var/tmp/* &&\
-    find /usr/share/ -type f -empty -delete || true &&\
-    find /usr/share/ -type d -empty -delete || true &&\
+    (find /usr/share/ -type f -empty -delete || true) &&\
+    (find /usr/share/ -type d -empty -delete || true) &&\
     mkdir -p /usr/share/texmf/source &&\
     mkdir -p /usr/share/texlive/texmf-dist/source &&\
 # run a test: are the LaTeX packages really installed?
