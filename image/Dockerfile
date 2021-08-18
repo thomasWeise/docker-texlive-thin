@@ -50,6 +50,7 @@ RUN echo "Performing initial clean-up and updates." &&\
           fonts-dejavu \
           fonts-dejavu-core \
           fonts-dejavu-extra \
+          fonts-noto-cjk \
           fontconfig \
           xz-utils &&\
 # install the microsoft core fonts
@@ -91,30 +92,43 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo "Initializing user tree." &&\
     tlmgr init-usertree &&\
     echo "tlmgr init-usertree done successfully" &&\
+    echo "Using TeXLive 2020 repository." &&\
+# see https://tex.stackexchange.com/questions/540429
+    tlmgr repository add ftp://tug.org/historic/systems/texlive/2020/tlnet-final &&\
+    tlmgr repository list &&\
+    tlmgr repository remove http://mirror.ctan.org/systems/texlive/tlnet &&\
+    tlmgr option repository ftp://tug.org/historic/systems/texlive/2020/tlnet-final &&\
+# updating via tlmgr
+    echo "Updating TeXLive via tlmgr." &&\
+    tlmgr --verify-repo=none update --self &&\
+    tlmgr --verify-repo=none update --all &&\
+    echo "Invoking updmap-sys." &&\
+# calling updmap-sys
     updmap-sys &&\
     echo "initial updmap-sys done successfully" &&\
 # tlmgr will call updmap-sys unsuccessfully for
 # reasons I do not understand, so while it seemingly
 # succeeds, it will still fail
     echo "Installing packages." &&\
-    (tlmgr install awesomebox \
-                   babel-german \
-                   background \
-                   filehook \
-                   fontawesome5 \
-                   footmisc \
-                   footnotebackref \
-                   fvextra \
-                   ly1 \
-                   mdframed \
-                   mweights \
-                   needspace \
-                   pagecolor \
-                   siunitx \
-                   sourcecodepro \
-                   sourcesanspro \
-                   ucharcat \
-                   unicode-math || true) &&\
+    (tlmgr --verify-repo=none install awesomebox \
+                                      babel-german \
+                                      background \
+                                      fandol \
+                                      filehook \
+                                      fontawesome5 \
+                                      footmisc \
+                                      footnotebackref \
+                                      fvextra \
+                                      ly1 \
+                                      mdframed \
+                                      mweights \
+                                      needspace \
+                                      pagecolor \
+                                      siunitx \
+                                      sourcecodepro \
+                                      sourcesanspro \
+                                      ucharcat \
+                                      unicode-math || true) &&\
     echo "tlmgr install completed, moving fonts" &&\
     cat /root/texmf/web2c/updmap.cfg >> /usr/share/texmf/web2c/updmap.cfg &&\
     (rm -rf /root/texmf/tlpkg || true) &&\
