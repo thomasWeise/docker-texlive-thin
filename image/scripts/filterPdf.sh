@@ -16,10 +16,19 @@ tempDest="$(tempfile)"
 
 echo "Filtering '$source' to temporary file '$tempDest'."
 
-gs -q -dEmbedAllFonts=true \
+gs -q -dPrinted=false \
+      -dEmbedAllFonts=true \
       -dSubsetFonts=true \
       -dCompressFonts=true \
+      -dCompressStreams=true \
       -dOptimize=true \
+      -dUNROLLFORMS \
+      -dCompatibilityLevel=1.7 \
+      -dLZWEncodePages=true \
+      -dCompressPages=true \
+      -dPassThroughJPEGImages=true \
+      -dPassThroughJPXImages=true \
+      -dCannotEmbedFontPolicy=/Error \
       -dPreserveCopyPage=false \
       -dPreserveEPSInfo=false \
       -dPreserveHalftoneInfo=false \
@@ -33,13 +42,12 @@ gs -q -dEmbedAllFonts=true \
       -dDownsampleColorImages=false \
       -dDetectDuplicateImages=true \
       -dHaveTransparency=true \
-      -dFastWebView=false \
       -dAutoFilterColorImages=false \
       -dAutoFilterGrayImages=false \
       -dColorImageFilter=/FlateEncode \
       -dGrayImageFilter=/FlateEncode \
       -dColorConversionStrategy=/LeaveColorUnchanged \
-      -dPrinted=false \
+      -dFastWebView=false \
       -dNOPAUSE \
       -dQUIET \
       -dBATCH \

@@ -137,6 +137,50 @@ RUN echo "Performing initial clean-up and updates." &&\
     (rm -rf /root/texmf || true) &&\
     (rm -rf /root/texmf-var || true) &&\
     echo "installed packages merged and /root/texmf deleted" &&\
+    echo "now deleting useless packages" &&\
+    cd /usr/share/texlive/texmf-dist/tex/ &&\
+    rm -rf a0poster a4wide achemso acro* actuarial* bewerbung biochemistr* \
+           bithesis bizcard bondgraph* bookshelf bubblesort carbohydrates \
+           catechis cclicenses changelog cheatsheet circui* commedit comment \
+           contracard course* csv* currvita* cv* dateiliste* denisbdoc \
+           diabetes* dinbrief directory dirtytalk duck* duotenzor \
+           dynkin-diagrams easy* elegant* elzcards emoji enigma es* \
+           etaremune europasscv europecv exam* exceltex exercis* exesheet \
+           ffslides fibeamer fink fithesis fixme* fjodor fla* flip* form* \
+           fonttable forest g-brief gauss gcard gender genealogy* git* \
+           gloss* gmdoc* HA-prosper hackthefootline halloweenmath hand* \
+           harnon-cv harpoon harveyballs he-she hobby hpsdiss ifmslide \
+           image-gallery invoice* interactiveworkbook isorot isotope \
+           istgame iwhdp jknapltx jlabels jslectureplanner jumplines \
+           kalendarium kantlipsum keystroke kix knitting* knowledge \
+           komacv* labels* ladder lectures lettr* lewis logbox magaz \
+           mail* makebarcode mandi mathexam mceinleger mcexam \
+           medstarbeamer menu* mi-solns minorrevision minutes mla-paper \
+           mnotes moderncv modernposter moderntimeline modiagram moodle \
+           multiaudience mwe my* neuralnetwork newspaper nomen* papermas \
+           pas-* pb-diagram permutepetiteannonce phf* philex \
+           phonenumbers photo piff* pinlabel pixelart plantslabels \
+           pmboxdraw pmgraph polynom* powerdot ppr-prv practicalreports \
+           pressrelease probsoln productbox progress* proofread protocol \
+           psbao psfrag* pst-* python qcircuit qcm qrcode qs* quantikz \
+           quicktype quiz2socrative quotchap qyxf-book ran* rcs* \
+           readablecv readarray realboxes recipe* rectopma \
+           reflectgraphics register reotex repeatindex rterface \
+           rulercompass runcode sa-tikz sauerj schedule schemabloc \
+           schooldocs scratch* scsnowman sdrt semant* seminar sem* \
+           sesstime setdeck sf298 sffms shadethm shdoc shipunov \
+           signchart simple* skb skdoc skeldoc skills skrapport \
+           smartdiagram spectralsequences sslides studenthandouts svn* \
+           swfigure swimgraf syntaxdi syntrace synttree table-fct \
+           tableaux tabu talk tasks tdclock technics ted texmate \
+           texpower texshade threadcol ticket ticollege todo* \
+           topiclongtable tqft tucv tufte-latex twoup uebungsblatt uml \
+           unravel upmethodology uwmslide vdmlisting venndiagram \
+           verbasef verifiche versonotes vhistory vocaltract was \
+           webquiz williams willowtreebook worksheet xbmks xcookybooky \
+           xcpdftips xdoc xebaposter xtuthesis xwatermark xytree ya* \
+           ycbook ydoc yplan zebra-goodies zed-csp zhlipsum ziffer zw* &&\
+    cd /tmp/ &&\
 # update latex and font system files:
 # Since I am not sure about the proper order,
 # we just do this twice.
@@ -182,6 +226,12 @@ RUN echo "Performing initial clean-up and updates." &&\
     (rm -rf /usr/share/texlive/index.html || true) &&\
     rm -rf /usr/share/texlive/texmf-dist/fonts/source &&\
     rm -rf /usr/share/texlive/texmf-dist/tex/latex/pst-poker &&\
+    rm -rf /usr/share/texlive/README &&\
+    rm -rf /usr/share/texlive/texmf-dist/texdoctk &&\
+    rm -rf /usr/share/texlive/texmf-dist/texdoc &&\
+    echo "Removing doc and other useless things." &&\
+    rm -rf /usr/share/doc &&\
+    mkdir -p /usr/share/doc &&\
 # clean up all temporary files
     echo "Cleaning up temporary files." &&\
     apt-get clean -y &&\
@@ -197,6 +247,7 @@ RUN echo "Performing initial clean-up and updates." &&\
     find /usr/share/doc -type f -name "*.tex" -delete &&\
     (find /usr/share/doc -type d -empty -delete || true) &&\
     mkdir -p /usr/share/doc &&\
+    rm -rf /usr/share/texlive/texmf-dist/doc &&\
     rm -rf /var/cache/apt/archives &&\
     mkdir -p /var/cache/apt/archives &&\
     rm -rf /tmp/* /var/tmp/* &&\
