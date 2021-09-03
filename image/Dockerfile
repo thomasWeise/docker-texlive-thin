@@ -138,7 +138,7 @@ RUN echo "Performing initial clean-up and updates." &&\
     (rm -rf /root/texmf-var || true) &&\
     echo "installed packages merged and /root/texmf deleted" &&\
     echo "now deleting useless packages" &&\
-    cd /usr/share/texlive/texmf-dist/tex/ &&\
+    cd /usr/share/texlive/texmf-dist/tex/latex/ &&\
     rm -rf a0poster a4wide achemso acro* actuarial* bewerbung biochemistr* \
            bithesis bizcard bondgraph* bookshelf bubblesort carbohydrates \
            catechis cclicenses changelog cheatsheet circui* commedit comment \
