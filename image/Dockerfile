@@ -9,7 +9,7 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
-FROM ubuntu:21.10
+FROM ubuntu:21.04
 MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 ENV LANG=C.UTF-8
