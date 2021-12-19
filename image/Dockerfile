@@ -9,7 +9,7 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
-FROM ubuntu:21.04
+FROM ubuntu:21.10
 MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 ENV LANG=C.UTF-8
@@ -298,5 +298,3 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo "Performing final clean-up." &&\
     rm -rf /tmp/* /var/tmp/* &&\
     echo "Setup completed."
-
-ADD scripts /bin/
