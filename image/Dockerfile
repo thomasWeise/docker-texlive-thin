@@ -9,16 +9,20 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN echo "Performing initial clean-up and updates." &&\
+RUN echo "Using chinese apt mirror, because otherwise I cannot build this image on my PC." &&\
+    sed -i 's/archive\.ubuntu\.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list &&\
+    echo "/etc/apt/sources.list  is now:" &&\
+    cat /etc/apt/sources.list &&\
+    echo "Performing initial clean-up and updates." &&\
     apt-get -y update &&\
-    apt-get -y --fix-missing install &&\
-    apt-get -y --with-new-pkgs upgrade &&\
+    apt-get -y --fix-missing --no-install-recommends install &&\
+    apt-get -y --with-new-pkgs --no-install-recommends upgrade &&\
 # prevent doc and man pages from being installed
 # the idea is based on https://askubuntu.com/questions/129566
     echo "Preventing documentation and man-pages from being installed." &&\
@@ -39,6 +43,10 @@ RUN echo "Performing initial clean-up and updates." &&\
 # install utilities
     echo "Installing utilities." &&\
     apt-get install -f -y --no-install-recommends apt-utils &&\
+    echo "Running one more upgrade cycle." &&\
+    apt-get -y update &&\
+    apt-get -y --fix-missing --no-install-recommends install &&\
+    apt-get -y --with-new-pkgs --no-install-recommends upgrade &&\
 # get and update certificates, to hopefully resolve mscorefonts error
     echo "Getting and updating certificates to help with mscorefonts." &&\
     apt-get install -f -y --no-install-recommends ca-certificates &&\
@@ -92,12 +100,6 @@ RUN echo "Performing initial clean-up and updates." &&\
     echo "Initializing user tree." &&\
     tlmgr init-usertree &&\
     echo "tlmgr init-usertree done successfully" &&\
-    echo "Using TeXLive 2020 repository." &&\
-# see https://tex.stackexchange.com/questions/540429
-    tlmgr repository add ftp://tug.org/historic/systems/texlive/2020/tlnet-final &&\
-    tlmgr repository list &&\
-    tlmgr repository remove http://mirror.ctan.org/systems/texlive/tlnet &&\
-    tlmgr option repository ftp://tug.org/historic/systems/texlive/2020/tlnet-final &&\
 # updating via tlmgr
     echo "Updating TeXLive via tlmgr." &&\
     tlmgr --verify-repo=none update --self &&\
@@ -187,31 +189,31 @@ RUN echo "Performing initial clean-up and updates." &&\
 # iteration 1
     echo "Updating LaTeX and font system files, iteration 1." &&\
     fc-cache -fv &&\
-    echo "fc-cache succeeded" &&\
+    echo "fc-cache succeeded." &&\
     texhash --verbose &&\
-    echo "texhash completed successfully" &&\
+    echo "texhash completed successfully." &&\
     updmap-sys &&\
-    echo "updmap-sys completed successfully" &&\
+    echo "updmap-sys completed successfully." &&\
     mktexlsr --verbose &&\
-    echo "mktexlsr succeeded" &&\
+    echo "mktexlsr succeeded." &&\
     fmtutil-sys --quiet --missing &&\
-    echo "fmtutil-sys --missing completed successfully" &&\
+    echo "fmtutil-sys --missing completed successfully." &&\
     fmtutil-sys --quiet --all > /dev/null &&\
-    echo "fmtutil-sys --all completed successfully" &&\
+    echo "fmtutil-sys --all completed successfully." &&\
 # iteration 2
     echo "Updating LaTeX and font system files, iteration 2." &&\
     fc-cache -fv &&\
-    echo "fc-cache succeeded" &&\
+    echo "fc-cache succeeded." &&\
     texhash --verbose &&\
-    echo "texhash completed successfully" &&\
+    echo "texhash completed successfully." &&\
     updmap-sys &&\
-    echo "updmap-sys completed successfully" &&\
+    echo "updmap-sys completed successfully." &&\
     mktexlsr --verbose &&\
-    echo "mktexlsr succeeded" &&\
+    echo "mktexlsr succeeded." &&\
     fmtutil-sys --quiet --missing &&\
-    echo "fmtutil-sys --missing completed successfully" &&\
+    echo "fmtutil-sys --missing completed successfully." &&\
     fmtutil-sys --quiet --all > /dev/null &&\
-    echo "fmtutil-sys --all completed successfully" &&\
+    echo "fmtutil-sys --all completed successfully." &&\
 # Hopefully, the installation and merging of latex packages
 # into the system-wide latex installation has worked...
 # delete texlive sources and other potentially useless stuff
