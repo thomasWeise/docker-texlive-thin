@@ -100,6 +100,11 @@ RUN echo "Using chinese apt mirror, because otherwise I cannot build this image 
     echo "Initializing user tree." &&\
     tlmgr init-usertree &&\
     echo "tlmgr init-usertree done successfully" &&\
+    echo "Using TeXLive 2021 repository." &&\
+    tlmgr repository add ftp://tug.org/historic/systems/texlive/2021/tlnet-final &&\
+    tlmgr repository list &&\
+    tlmgr repository remove http://mirror.ctan.org/systems/texlive/tlnet &&\
+    tlmgr option repository ftp://tug.org/historic/systems/texlive/2021/tlnet-final &&\
 # updating via tlmgr
     echo "Updating TeXLive via tlmgr." &&\
     tlmgr --verify-repo=none update --self &&\
