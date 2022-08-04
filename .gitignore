@@ -4,3 +4,4 @@
 .Ruserdata
 docker-texlive-thin.Rproj
 *.Rproj
+.project
